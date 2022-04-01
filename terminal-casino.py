@@ -1,3 +1,5 @@
+#Yes. I'm aware this is a mess right now. Look it's my first project don't hate. :L
+
 #Imports
 import random
 import datetime
