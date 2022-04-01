@@ -182,7 +182,16 @@ def black_jack():
     #Creates a deck of cards using deck_maker
     deck_maker(new_deck)
 
-
+    print("Shuffling Cards")
+    sleep(1)
+    print("Shuffle Noise")
+    sleep(1)
+    print("Shuff")
+    sleep(1)
+    print("shuff")
+    sleep(1)
+    print("Dealing Cards")
+    sleep(2)
     #Deal the player 2 cards. And Remove them from the deck.
     while len(player1.player_cards) < 2:
         player_card = random.choice(new_deck)
@@ -217,8 +226,12 @@ def black_jack():
 
     #What would the player like to do now?
     player_choice = input("What would you like to do? (Stand, Surrender, Hit, Double Down): ")
-    if player_choice == "Stand":
+    if player_choice == "Surrender":
         print(game_over_text)
+        print("Half of inital Bet Back to Player")
+        play_again = input("Would you like to play again? (Yes, No): ")
+        if play_again == "Yes":
+            black_jack()
 
 #Ready to play 
 print(load_text1)
