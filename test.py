@@ -19,3 +19,15 @@ print("\t$                 $")
 print("\t$                 $")
 print("\t$              {}  $".format(cards[0]))
 print("\t$_________________$")
+
+class Player:
+    def __init__(self, name, money = 0, games_played = 0):
+        self.money = money
+        self.name = name
+        self.games_player = games_played
+
+    def money_add_remove(self, money_amount):
+        self.money += money_amount
+
+player1 = Player("Josh", 1000,)
+print(player1.name, player1.money)
