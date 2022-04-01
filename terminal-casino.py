@@ -2,7 +2,7 @@
 import random
 import datetime
 from time import sleep
-# Graphic to load when starting game.
+# Graphics
 load_text1 = """
  /$$      /$$           /$$                                            
 | $$  /$ | $$          | $$                                            
@@ -36,6 +36,17 @@ load_text3 = """
    | $$|  $$$$$$$| $$      | $$ | $$ | $$| $$| $$  | $$|  $$$$$$$| $$      |  $$$$$$/|  $$$$$$$ /$$$$$$$/| $$| $$  | $$|  $$$$$$/
    |__/ \_______/|__/      |__/ |__/ |__/|__/|__/  |__/ \_______/|__/       \______/  \_______/|_______/ |__/|__/  |__/ \______/ 
                                                                                                                                  
+"""
+
+game_over_text = """
+  /$$$$$$                                           /$$$$$$                               
+ /$$__  $$                                         /$$__  $$                              
+| $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$       | $$  \ $$ /$$    /$$ /$$$$$$   /$$$$$$ 
+| $$ /$$$$ |____  $$| $$_  $$_  $$ /$$__  $$      | $$  | $$|  $$  /$$//$$__  $$ /$$__  $$
+| $$|_  $$  /$$$$$$$| $$ \ $$ \ $$| $$$$$$$$      | $$  | $$ \  $$/$$/| $$$$$$$$| $$  \__/
+| $$  \ $$ /$$__  $$| $$ | $$ | $$| $$_____/      | $$  | $$  \  $$$/ | $$_____/| $$      
+|  $$$$$$/|  $$$$$$$| $$ | $$ | $$|  $$$$$$$      |  $$$$$$/   \  $/  |  $$$$$$$| $$      
+ \______/  \_______/|__/ |__/ |__/ \_______/       \______/     \_/    \_______/|__/ 
 """
 
 #Create Card Visual
@@ -203,6 +214,11 @@ def black_jack():
     for card in house1.player_cards[:-1]:
         house1.game_points += card.card_points
     print(house1.game_points)
+
+    #What would the player like to do now?
+    player_choice = input("What would you like to do? (Stand, Surrender, Hit, Double Down): ")
+    if player_choice == "Stand":
+        print(game_over_text)
 
 #Ready to play 
 print(load_text1)
