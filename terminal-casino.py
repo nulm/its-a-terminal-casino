@@ -56,7 +56,8 @@ def card_visual(cards, hidden_card = False):
     visual = ""
     for card in cards:
         visual = visual + "\t _________________"
-    #This will print no matter what if card_visual(hidden_card = True). This is so the dealer can later have two cards in his daraw. And you can just cut it out while still passsing in a list object of just one card. 
+    #This will print no matter what if card_visual(hidden_card = True). This is so the dealer can later have two cards in his daraw. And you can just cut out the second card as this needs a list object to be passed into it..
+    #While still showing two cards. One is the first card drawn the second being what this if statement does. Prints a card not showing any information.  
     if hidden_card:
         visual = visual + "\t _________________"
     print(visual)
