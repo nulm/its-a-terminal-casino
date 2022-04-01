@@ -2,6 +2,7 @@
 import random
 import datetime
 from time import sleep
+import sys
 # Graphics
 load_text1 = """
  /$$      /$$           /$$                                            
@@ -48,7 +49,29 @@ game_over_text = """
 |  $$$$$$/|  $$$$$$$| $$ | $$ | $$|  $$$$$$$      |  $$$$$$/   \  $/  |  $$$$$$$| $$      
  \______/  \_______/|__/ |__/ |__/ \_______/       \______/     \_/    \_______/|__/ 
 """
-
+game_exit_text = """
+  /$$$$$$                            /$$       /$$$$$$$                     
+ /$$__  $$                          | $$      | $$__  $$                    
+| $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$$      | $$  \ $$ /$$   /$$  /$$$$$$ 
+| $$ /$$$$ /$$__  $$ /$$__  $$ /$$__  $$      | $$$$$$$ | $$  | $$ /$$__  $$
+| $$|_  $$| $$  \ $$| $$  \ $$| $$  | $$      | $$__  $$| $$  | $$| $$$$$$$$
+| $$  \ $$| $$  | $$| $$  | $$| $$  | $$      | $$  \ $$| $$  | $$| $$_____/
+|  $$$$$$/|  $$$$$$/|  $$$$$$/|  $$$$$$$      | $$$$$$$/|  $$$$$$$|  $$$$$$$
+ \______/  \______/  \______/  \_______/      |_______/  \____  $$ \_______/
+                                                         /$$  | $$          
+                                                        |  $$$$$$/          
+                                                         \______/ 
+"""
+you_win_text = """
+ /$$     /$$                                      /$$          
+|  $$   /$$/                                     |__/          
+ \  $$ /$$//$$$$$$  /$$   /$$       /$$  /$$  /$$ /$$ /$$$$$$$ 
+  \  $$$$//$$__  $$| $$  | $$      | $$ | $$ | $$| $$| $$__  $$
+   \  $$/| $$  \ $$| $$  | $$      | $$ | $$ | $$| $$| $$  \ $$
+    | $$ | $$  | $$| $$  | $$      | $$ | $$ | $$| $$| $$  | $$
+    | $$ |  $$$$$$/|  $$$$$$/      |  $$$$$/$$$$/| $$| $$  | $$
+    |__/  \______/  \______/        \_____/\___/ |__/|__/  |__/
+"""
 #Create Card Visual
 def card_visual(cards, hidden_card = False):
 
@@ -183,6 +206,28 @@ def black_jack():
     #Creates a deck of cards using deck_maker
     deck_maker(new_deck)
 
+    #Checks if player has busted
+    def player_over_21_points():
+        if player1.game_points > 21:
+            print("You are BUST!")
+            print(game_over_text)
+        else:
+            return
+    
+    #Play again Fucntion
+    def play_again():
+        play_again1 = input("Would you like to play again? (Yes, No)")
+        if play_again1 == "yes":
+            black_jack()
+        elif play_again1 == "No":
+            sys.exit(game_exit_text)
+        else:
+            print("Not a valid input")
+            play_again()
+
+
+
+
     print("Shuffling Cards")
     sleep(1)
     print("Shuffle Noise")
@@ -208,6 +253,9 @@ def black_jack():
     print("")
     print("For a total of:")
     print(player1.game_points)
+    if player1.game_points == 21:
+        print(you_win_text)
+        play_again()
     
     #Deal the house two cards. And Remove them from the deck.
     while len(house1.player_cards) < 2:
@@ -220,20 +268,66 @@ def black_jack():
     print("-------------------------------------------------------------")
     print("The Houses Cards are:")
     card_visual(house1.player_cards[:-1], True)
-    print("For a Total of:")
     for card in house1.player_cards[:-1]:
         house1.game_points += card.card_points
+    if house1.game_points == 21:
+        card_visual(house1.player_cards)
+        print("The house got 21!")
+        print(game_over_text)
+        play_again()
+        
+
+    print("For a Total of:")
     print(house1.game_points)
 
-    #What would the player like to do now?
-    player_choice = input("What would you like to do? (Stand, Surrender, Hit, Double Down): ")
-    if player_choice == "Surrender":
-        print(game_over_text)
-        print("Half of inital Bet Back to Player")
-        play_again = input("Would you like to play again? (Yes, No): ")
-        if play_again == "Yes":
-            black_jack()
 
+    #What would the player like to do now?
+    def action_hit():
+        print("Drawing One more Card.")
+        player_card = random.choice(new_deck)
+        player1.player_cards.append(player_card)
+        new_deck.remove(player_card)
+        print("Your cards are: ")
+        card_visual(player1.player_cards)
+        print("For a total of: ")
+        player1.game_points = 0
+        for card in player1.player_cards:
+            player1.game_points += card.card_points
+        print(player1.game_points)
+        sleep(2)
+        def hit_me_one_more_time():
+            hit_again = input("Would you like to hit again? (Yes / NO) ")
+            if hit_again == "Yes":
+                action_hit
+            elif hit_again ==  "No":
+                print("test")
+            else:
+                print("Not a valid input.")
+                hit_me_one_more_time()
+        hit_me_one_more_time()
+
+
+
+    def round_1_choice():
+        player_choice = input("What would you like to do? (Stand, Surrender, Hit, Double Down): ")
+        if player_choice == "Surrender":
+            print(game_over_text)
+            print("Half of inital Bet Back to Player")
+            play_again = input("Would you like to play again? (Yes, No): ")
+            if play_again == "Yes":
+                black_jack()
+        elif player_choice == "Hit":
+            action_hit()
+        elif player_choice == "Double Down":
+            print("Better not implemented.")
+            print("Drawing One more card.")
+        #elif player_choice == "Stand":
+            #action_stand
+        else:
+            print("That's not a valid option.")
+            round_1_choice()
+            
+    round_1_choice()
 #Ready to play 
 print(load_text1)
 print(load_text2)
