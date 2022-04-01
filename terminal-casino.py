@@ -45,8 +45,9 @@ def card_visual(cards, hidden_card = False):
     visual = ""
     for card in cards:
         visual = visual + "\t _________________"
+    #This will print no matter what if card_visual(hidden_card = True). This is so the dealer can later have two cards in his daraw. And you can just cut it out while still passsing in a list object of just one card. 
     if hidden_card:
-        visual = "\t _________________"
+        visual = visual + "\t _________________"
     print(visual)
 
     #One line down with card Value
@@ -170,6 +171,7 @@ def black_jack():
     #Creates a deck of cards using deck_maker
     deck_maker(new_deck)
 
+
     #Deal the player 2 cards. And Remove them from the deck.
     while len(player1.player_cards) < 2:
         player_card = random.choice(new_deck)
@@ -182,6 +184,7 @@ def black_jack():
         player1.game_points += card.card_points
     print("Your cards are:")
     card_visual(player1.player_cards)
+    print("")
     print("For a total of:")
     print(player1.game_points)
     
@@ -192,9 +195,30 @@ def black_jack():
         new_deck.remove(player_card)
     
     #Print out the Houses Cards and current point total while keeping their second card hidden.
-    
+    print("")
+    print("-------------------------------------------------------------")
+    print("The Houses Cards are:")
+    card_visual(house1.player_cards[:-1], True)
+    print("For a Total of:")
+    for card in house1.player_cards[:-1]:
+        house1.game_points += card.card_points
+    print(house1.game_points)
+
+#Ready to play 
+print(load_text1)
+print(load_text2)
+print(load_text3)
+play_game = input("Are you wanting to play? - (Yes or No): ")
+if play_game == "Yes":
+    what_game_start = input("What game would you like to play? (Blackjack or Blackjack): ")
+if what_game_start == "Blackjack":
+    black_jack()
 
 
 
-black_jack()    
+
+
+
+
+ 
 

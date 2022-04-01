@@ -31,3 +31,6 @@ class Player:
 
 player1 = Player("Josh", 1000,)
 print(player1.name, player1.money)
+
+list1 = [1, 2, 3, 4, 5, 6]
+print(list1[:-1])
