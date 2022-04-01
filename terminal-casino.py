@@ -1,4 +1,4 @@
-#Improts
+#Imports
 import random
 import datetime
 from time import sleep
