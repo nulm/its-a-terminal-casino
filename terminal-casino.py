@@ -332,6 +332,10 @@ def black_jack():
                 house1.game_points += card.card_points
             print("The houses total points is now: ")
             print(house1.game_points)
+            if house1.game_points > 21:
+                print("House over 21.")
+                print(you_win_text)
+                play_again()
         house_at_17()
 
 
