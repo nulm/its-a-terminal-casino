@@ -3,6 +3,7 @@
 #Imports
 import random
 import datetime
+from re import I
 from time import sleep
 import sys
 # Graphics
@@ -73,6 +74,18 @@ you_win_text = """
     | $$ | $$  | $$| $$  | $$      | $$ | $$ | $$| $$| $$  | $$
     | $$ |  $$$$$$/|  $$$$$$/      |  $$$$$/$$$$/| $$| $$  | $$
     |__/  \______/  \______/        \_____/\___/ |__/|__/  |__/
+"""
+
+you_lose_text = """
+
+ /$$     /$$                        /$$                                    
+|  $$   /$$/                       | $$                                    
+ \  $$ /$$//$$$$$$  /$$   /$$      | $$        /$$$$$$   /$$$$$$$  /$$$$$$ 
+  \  $$$$//$$__  $$| $$  | $$      | $$       /$$__  $$ /$$_____/ /$$__  $$
+   \  $$/| $$  \ $$| $$  | $$      | $$      | $$  \ $$|  $$$$$$ | $$$$$$$$
+    | $$ | $$  | $$| $$  | $$      | $$      | $$  | $$ \____  $$| $$_____/
+    | $$ |  $$$$$$/|  $$$$$$/      | $$$$$$$$|  $$$$$$/ /$$$$$$$/|  $$$$$$$
+    |__/  \______/  \______/       |________/ \______/ |_______/  \_______/
 """
 #Create Card Visual
 def card_visual(cards, hidden_card = False):
@@ -203,8 +216,24 @@ class House:
 player1 = Player("deafult", [], 1500)
 house1 = House("The Terminal Casino", [])
 
+#Play again Fucntion
+def play_again():
+    play_again1 = input("Would you like to play again? (Yes, No)")
+    if play_again1 == "Yes":
+        black_jack()
+    elif play_again1 == "No":
+        sys.exit(game_exit_text)
+    else:
+        print("Not a valid input")
+        play_again()
+
 #Black Jack Game
 def black_jack():
+    #Reset player and house points and cards
+    player1.player_cards = []
+    player1.game_points = 0
+    house1.game_points = 0
+    house1.player_cards = []
     #Creates a deck of cards using deck_maker
     deck_maker(new_deck)
 
@@ -213,23 +242,10 @@ def black_jack():
         if player1.game_points > 21:
             print("You are BUST!")
             print(game_over_text)
+            play_again()
         else:
             return
     
-    #Play again Fucntion
-    def play_again():
-        play_again1 = input("Would you like to play again? (Yes, No)")
-        if play_again1 == "yes":
-            black_jack()
-        elif play_again1 == "No":
-            sys.exit(game_exit_text)
-        else:
-            print("Not a valid input")
-            play_again()
-
-
-
-
     print("Shuffling Cards")
     sleep(1)
     print("Shuffle Noise")
@@ -284,6 +300,83 @@ def black_jack():
 
 
     #What would the player like to do now?
+    def house_at_17():
+        print("The dealer stands.")
+        print("Checking player and house point total.")
+        sleep(2)
+        if player1.game_points > house1.game_points:
+            print(you_win_text)
+            play_again()
+        elif house1.game_points > player1.game_points:
+            print(you_lose_text)
+            print(game_over_text)
+            play_again()
+        elif house1.game_points == player1.game_points:
+            print("Same score.")
+            print("You get your bet back.")
+            print(game_over_text)
+            play_again()
+        else:
+            return
+
+    def house_hit():
+        while house1.game_points < 16:
+            print("The house Hits")
+            player_card = random.choice(new_deck)
+            house1.player_cards.append(player_card)
+            new_deck.remove(player_card)
+            card_visual(house1.player_cards)
+            #Resets house points so the new card can be counted with the old cards.
+            house1.game_points = 0
+            for card in house1.player_cards:
+                house1.game_points += card.card_points
+            print("The houses total points is now: ")
+            print(house1.game_points)
+        house_at_17()
+
+
+    def house_choice():
+        print("Your turn is over. Now for the house.")
+        print("The house flips their hidden card")
+        card_visual(house1.player_cards)
+        house1.game_points = 0
+        for card in house1.player_cards:
+            house1.game_points += card.card_points
+        print("The house now has a total of:")
+        print(house1.game_points)
+        if house1.game_points <= 16:
+            house_hit()
+        else:
+            house_at_17()
+
+
+    #Function to hit the player. (Give them a card. Not throw the monitor at them.)
+    def hit_me_one_more_time():
+        hit_again = input("Would you like to hit again? (Yes / No) ")
+        if hit_again == "Yes":
+            print("Drawing one more card")
+            player_card = random.choice(new_deck)
+            player1.player_cards.append(player_card)
+            new_deck.remove(player_card)
+            print("Your cards are: ")
+            card_visual(player1.player_cards)
+            print("For a total of: ")
+            #Resets players point count so it can recount with the new card!
+            player1.game_points = 0
+            for card in player1.player_cards:
+                player1.game_points += card.card_points
+            print(player1.game_points)
+            #Check if the new card busted the player. If not asks if player wants to hit agian.
+            if player1.game_points > 21:
+                player_over_21_points()
+            else:
+                hit_me_one_more_time()
+        elif hit_again ==  "No":
+            house_choice()
+        else:
+            print("Not a valid input.")
+            hit_me_one_more_time()
+    
     def action_hit():
         print("Drawing One more Card.")
         player_card = random.choice(new_deck)
@@ -296,17 +389,18 @@ def black_jack():
         for card in player1.player_cards:
             player1.game_points += card.card_points
         print(player1.game_points)
-        sleep(2)
-        def hit_me_one_more_time():
-            hit_again = input("Would you like to hit again? (Yes / NO) ")
-            if hit_again == "Yes":
-                action_hit
-            elif hit_again ==  "No":
-                print("test")
-            else:
-                print("Not a valid input.")
-                hit_me_one_more_time()
+        sleep(1)
+        if player1.game_points > 21:
+            player_over_21_points()
+        else:
+            hit_me_one_more_time()    
         hit_me_one_more_time()
+
+    def action_stand():
+        print("You stand!")
+        house_choice()
+
+
 
 
 
@@ -321,10 +415,10 @@ def black_jack():
         elif player_choice == "Hit":
             action_hit()
         elif player_choice == "Double Down":
-            print("Better not implemented.")
-            print("Drawing One more card.")
-        #elif player_choice == "Stand":
-            #action_stand
+            print("Betting not implemented.")
+            action_hit()
+        elif player_choice == "Stand":
+            action_stand()
         else:
             print("That's not a valid option.")
             round_1_choice()
